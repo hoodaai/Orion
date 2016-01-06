@@ -1,0 +1,26 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin:'application'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+//mainClassName = 'spring_dependency_injection.Application'
+//mainClassName = 'circular_dependency.Application'
+//mainClassName = 'static_factory.Application'
+mainClassName = 'factory_bean.Application'
+
+repositories {
+  mavenCentral()
+}
+
+
+dependencies {
+
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.springframework:spring-context:4.2.1.RELEASE'
+
+    testCompile 'junit:junit:4.12'
+}

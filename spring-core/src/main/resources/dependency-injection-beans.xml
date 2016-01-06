@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="upperCaseConverter" class="spring_dependency_injection.UpperCaseConverter"></bean>
+
+    <!-- setter injection-->
+    <bean id="stringConverter" class="spring_dependency_injection.StringConverter">
+        <property name="acceptableLength" value="30" />
+        <property name="string" value="convert me to uppercase" />
+        <property name="converter" ref="upperCaseConverter" />
+    </bean>
+
+    <!-- Constructor injection-->
+    <!--  use the constructor parameter name for value disambiguation-->
+    <bean id="strConverterUsingConstructorType-1" class="spring_dependency_injection.StringConverter">
+        <constructor-arg name="string" value="Hello"/>
+        <constructor-arg name="acceptableLength" value="30"/>
+        <constructor-arg ref="upperCaseConverter"/>
+    </bean>
+
+    <!--explicitly specify the type of the constructor argument using the type attribute -->
+    <bean id="strConverterUsingConstructorType-2" class="spring_dependency_injection.StringConverter">
+        <constructor-arg type="spring_dependency_injection.Converter" ref="upperCaseConverter"/>
+        <constructor-arg type="java.lang.String" value="Hello"/>
+        <constructor-arg type="java.lang.Integer" value="30"/>
+    </bean>
+
+    <!-- Use the index attribute to specify explicitly the index of constructor arguments-->
+    <bean id="strConverterUsingConstructorType-3" class="spring_dependency_injection.StringConverter">
+        <constructor-arg index="2" ref="upperCaseConverter"/>
+        <constructor-arg index="0" value="Hello"/>
+        <constructor-arg index="1" value="30"/>
+    </bean>
+
+    <!-- The idref element is simply an error-proof way to pass the id (string value - not a reference)
+     of another bean in the container to a <constructor-arg/> or <property/> element.
+     using the idref tag allows the container to validate at deployment time that the referenced, named bean actually exists.
+
+    A common place (at least in versions earlier than Spring 2.0) where the <idref/> element brings value is
+    in the configuration of AOP interceptors in a ProxyFactoryBean bean definition. Using <idref/>
+    elements when you specify the interceptor names prevents you from misspelling an interceptor id.
+     -->
+
+    <bean id="stringConverter-idref" class="spring_dependency_injection.StringConverter">
+        <property name="string">
+            <idref bean="upperCaseConverter"></idref>
+        </property>
+    </bean>
+
+</beans>
