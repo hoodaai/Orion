@@ -1,0 +1,4 @@
+include ':event_framework'
+
+project(':event_framework').projectDir = new File(settingsDir, '../event_framework')
+

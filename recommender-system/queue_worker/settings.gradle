@@ -1,0 +1,7 @@
+include ':event_framework', ':spring_rabbit', ':recommendation_algo'
+
+project(':event_framework').projectDir = new File(settingsDir, '../event_framework')
+project(':spring_rabbit').projectDir = new File(settingsDir, '../spring_rabbit')
+project(':recommendation_algo').projectDir = new File(settingsDir, '../recommendation_algo')
+
+rootProject.name = 'queue_worker'

@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin:'application'
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = 'com.recommender.consumer.MainApp'
+
+allprojects {
+    apply plugin: 'idea'
+}
+
+dependencies {
+    compile project(':spring_rabbit')
+    compile project(':event_framework')
+    compile project(':recommendation_algo')
+
+    compile 'org.springframework:spring-core:4.1.6.RELEASE',
+            'org.springframework:spring-context:4.1.6.RELEASE',
+            'com.rabbitmq:amqp-client:3.5.2',
+            'org.springframework.amqp:spring-rabbit:1.4.4.RELEASE',
+            'com.google.code.gson:gson:1.7.2'
+
+    testCompile 'junit:junit:4.12'
+}
