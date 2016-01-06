@@ -1,0 +1,61 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+    <global-method-security pre-post-annotations="enabled">
+        <!-- AspectJ pointcut expression that locates our "post" method and applies security that way
+        <protect-pointcut expression="execution(* bigbank.*Service.post*(..))" access="ROLE_TELLER"/>
+        -->
+    </global-method-security>
+
+    <!--<http>-->
+        <!--<intercept-url pattern="/**" access="hasRole('USER')" /> <form-login />-->
+        <!--<logout />-->
+    <!--</http>-->
+
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/resources/**" access="permitAll()" />
+        <intercept-url pattern="/status" access="permitAll()" />
+        <intercept-url pattern="/**" access="hasRole('USER')" />
+        <form-login />
+        <csrf disabled="true"/>
+        <logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/status" />
+        <access-denied-handler ref="accessDeniedHandler"/>
+    </http>
+
+
+    <!--<http use-expressions="true">-->
+        <!--<intercept-url pattern="/PageControllerTestCase.java" access="hasAnyRole('USER')"/>-->
+        <!--&lt;!&ndash;  <intercept-url pattern="/jm/*.htm" access="permitAll()"/> &ndash;&gt;-->
+        <!--&lt;!&ndash; <intercept-url pattern="/*.htm" access="permitAll()"/> &ndash;&gt;-->
+        <!--&lt;!&ndash;<form-login login-page="/authenticate/login.htm" authentication-failure-url="/authenticate/login.htm?msg=loginFailed" default-target-url="/showMemberDashboard.htm"/>&ndash;&gt;-->
+        <!--<form-login />-->
+        <!--<logout logout-url="/authenticate/logout.htm" logout-success-url="/authenticate/login.htm?msg=logoutSuccess"/>-->
+        <!--<remember-me />-->
+    <!--</http>-->
+
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="jimi" password="jimi" authorities="ROLE_USER, ROLE_ADMIN" />
+                <user name="bob" password="bob" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+    <!--<authentication-manager>-->
+        <!--<authentication-provider>-->
+            <!--<jdbc-user-service data-source-ref="dataSource"-->
+                               <!--users-by-username-query="SELECT U.loginname AS username, U.password, U.status AS enabled FROM user U WHERE U.loginname=?"-->
+                               <!--authorities-by-username-query="SELECT U.loginname, R.role_name as authority FROM user U JOIN roles R ON U.role_id = R.role_id WHERE U.loginname=?"/>-->
+        <!--</authentication-provider>-->
+    <!--</authentication-manager>-->
+
+
+
+</beans:beans>

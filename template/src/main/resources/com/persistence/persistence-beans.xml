@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <tx:annotation-driven/>
+    <!--<context:component-scan base-package="com" />-->
+
+    <beans profile="dev">
+        <!--mysql database-->
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+            <property name="url" value="jdbc:mysql://192.168.33.60:3306/testdb"/>
+            <property name="username" value="admin"/>
+            <property name="password" value="root"/>
+        </bean>
+    </beans>
+
+
+    <beans profile="local">
+        <!-- H2 database -->
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="org.h2.Driver"/>
+            <!-- enable if you want file based h2 database instead of in memory-->
+            <!--<property name="url" value="jdbc:h2:file:~/socialmedia"/>-->
+            <property name="url" value="jdbc:h2:mem:socialmedia"/>
+            <property name="username" value="sa"/>
+            <property name="password" value=""/>
+        </bean>
+    </beans>
+
+
+    <beans profile="local,dev">
+        <bean id="transactionManager"
+              class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+            <property name="sessionFactory" ref="sessionFactory" />
+        </bean>
+
+        <bean id="sessionFactory"
+              class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
+            <property name="dataSource">
+                <ref bean="dataSource"/>
+            </property>
+
+            <property name="hibernateProperties">
+                <props>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+                    <prop key="hibernate.show_sql">true</prop>
+                </props>
+            </property>
+
+            <property name="annotatedClasses">
+                <list>
+                    <value>com.model.FaceBookPage</value>
+                </list>
+            </property>
+
+        </bean>
+
+
+        <bean id="pagesDao" class="com.dao.PagesDao">
+            <property name="sessionFactory" ref="sessionFactory"></property>
+        </bean>
+    </beans>
+
+
+
+<!-- Flyway bean, which is initialized by spring application context on server startup. This bean scans for sql migration
+ scripts on given location and executes them -->
+    <beans profile="local,dev">
+        <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+            <property name="baselineOnMigrate" value="true" />
+            <property name="locations" value="classpath:db/migration" />
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+    </beans>
+
+</beans>

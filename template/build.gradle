@@ -1,0 +1,120 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'jetty'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
+    compile 'javax.servlet:jstl:1.2'
+
+    compile 'javax.servlet:servlet-api:3.0-alpha-1'
+//    compile 'org.springframework:spring-context:4.2.1.RELEASE',
+//            'org.springframework:spring-test:4.2.1.RELEASE' //spring test suite
+
+//    compile 'org.apache.commons:commons-lang3:3.0',
+//            'commons-fileupload:commons-fileupload:1.2'
+
+    //flyway spring integration
+    compile  'org.flywaydb:flyway-core:3.2.1'
+
+    // hibernate dependency
+    compile 'org.springframework:spring-jdbc:4.1.6.RELEASE',
+            'org.springframework:spring-orm:4.1.6.RELEASE',
+            'org.hibernate:hibernate-core:4.2.20.Final',
+            'commons-dbcp:commons-dbcp:1.2.2',
+            /* if using mysql database*/
+            //'mysql:mysql-connector-java:5.1.36',
+            /* if using H2 database*/
+            'com.h2database:h2:1.4.190'
+
+    //spring security
+    compile 'org.springframework.security:spring-security-web:4.0.2.RELEASE',
+            'org.springframework.security:spring-security-config:4.0.2.RELEASE'
+
+
+//    runtime 'javax.servlet:jstl:1.1.2',
+//             'com.fasterxml.jackson.core:jackson-databind:2.5.3',
+//             'com.fasterxml.jackson.core:jackson-core:2.5.3'
+
+    /* test dependencies */
+//    testCompile 'junit:junit:4.12'
+//    testCompile 'javax.servlet:javax.servlet-api:3.1.0',
+//                'org.springframework:spring-webmvc:4.2.1.RELEASE',
+//                'org.springframework:spring-context:4.2.1.RELEASE',
+//                'com.jayway.jsonpath:json-path:2.0.0'
+//
+//    testCompile 'com.h2database:h2:1.4.190',
+//                'org.flywaydb:flyway-core:3.2.1' /* flyway spring integration */
+//
+//
+//    /* easymock integration*/
+//    testCompile 'org.easymock:easymockclassextension:2.5.2',
+//                'org.easymock:easymock:2.5.2'
+
+}
+/**
+ * The buildScript block determines which plugins, task classes, and other classes are available for use in the rest of
+ * the build script. Without a buildScript block, you can use everything that ships with Gradle out-of-the-box. If you
+ * additionally want to use third-party plugins, task classes, or other classes (in the build script!), you have to
+ * specify the corresponding dependencies in the buildScript block.
+ */
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        /* uncomment, if using mysql database */
+        /*classpath 'mysql:mysql-connector-java:5.1.36' */
+
+        /*comment, if not using H2 database*/
+        classpath 'com.h2database:h2:1.4.190'
+
+        classpath "org.flywaydb:flyway-gradle-plugin:3.2.1"
+    }
+}
+
+apply plugin: "org.flywaydb.flyway"
+
+/* flyway & H2 database integration*/
+flyway {
+    url = 'jdbc:h2:file:~/socialmedia'
+    user = 'sa'
+}
+
+/* uncomment, if using mysql database, and provide correct url, username and password */
+/*flyway {
+    url = 'jdbc:mysql://192.168.33.60:3306'
+    user = 'admin'
+    password = 'root'
+    schemas = ['db_name']
+}*/
+
+test {
+    reports {
+        junitXml.enabled = false
+        html.enabled = true
+    }
+}
+
+jettyRun{
+    contextPath = "spring4"
+    httpPort = 8080
+}
+
+jettyRunWar{
+    contextPath = "spring4"
+    httpPort = 8080
+}
