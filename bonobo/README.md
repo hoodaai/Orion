@@ -1,32 +1,17 @@
-##Impression Marks Service
-==========================
+bonobo
+======
 
-A global publishing company that publishes books and journals wants to develop a service to
-add Springer Impression to their documents. Book publications include topics in business,
-science and media. Journals don’t include any specific topics. A document (books, journals)
-has a title, author and an impression-mark property. An empty impression-mark property
-indicates that the document has not been impression-marked yet.
+This repository has multiple projects. The sole purpose of these projects are Learning java technologies.
 
-The impression marking service has to be asynchronous. For a given content document the service
-should return a ticket, which can be used to poll the status of processing. If the impression
-marking is finished,then the document can be retrieved with the ticket. The impression-mark of
-a book or a journal is identified by setting the impression-mark property of the object. For a
-book the impression-mark includes the properties content, title, author and topic. The journal
-impression-mark includes the content, title and author.
+1. Write a small project to show synchronization issues on Database level. It should use hibernate. Write Junits to validate. You could
+use campaign update example for illustration.
 
-###Examples for impression-marks:
+2. There are some houses in row. A thief knows about the maximum wealth he can steal from each house. Theif can robber only one house every
+night. If theif robs nth house then owner of that house inform n-1 and n+1 house owner about the robbery and put them on alert.
+Thus theif can not rob n-1 and n+1 house. Implement a solution so that theif can rob maximum wealth.
 
-- {content:”book”, title:”The Dark Code”, author:”Bruce Wayne”, topic:”Science”}
+3. We have a caching mechanism which stores computation result of a method say, Compute(number). If same number is computed again then result
+is served from cache. But this approach is not effective enough in multuthreaded environment. Suppose three thread starts to compute same
+number which is not already in cache then compute will be executed three times. Redesign caching to solve this problem.
 
-- {content:”book”, title:”How to make money”, author:”Dr. Evil”, topic:”Business”}
-
-- {content:”journal”, title:”Journal of human flight routes”, author:”Clark Kent”}
-
-
-###Solution contains:
-
-- An appropriate object-oriented model for the problem.
-
-- Implementation of the Impression-mark Service, meeting the above conditions.
-
-- Junit Tests to ensure the functionality of the service.
+4. Design a class which is singleton and should be work properly in multithreaded environment. This class contains a method String[] getDatabaseConfiguration(). This method is called to get database configuration. We need to design a cache for database configuration so that a client never gets a data more than 5 minutes old. For this you need to define an another method getCachedDatabaseConfiguration() which would call getDatabaseConfiguration() internally to refresh cache.
