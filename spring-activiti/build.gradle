@@ -1,0 +1,32 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'jetty'
+apply plugin:'application'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+mainClassName = 'springcli.Application'
+
+
+repositories {
+   mavenCentral()
+}
+
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.springframework:spring-context:4.2.1.RELEASE'// spring-aop, spring-beans, spring-context, spring-core, spring-expression
+
+    compile 'org.activiti:activiti-engine:5.18.0' // activiti-bpmn-converter, model, activiti-engine, activiti-image-generator, activiti-process-validation
+    compile 'org.activiti:activiti-spring:5.18.0'
+
+    compile 'mysql:mysql-connector-java:5.1.36' // mysql driver
+    compile 'commons-dbcp:commons-dbcp:1.2.2'  // connection poll
+
+    compile 'com.sendgrid:sendgrid-java:2.2.1'
+
+    testCompile 'junit:junit:4.12'
+}
